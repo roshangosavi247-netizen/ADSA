@@ -1,0 +1,72 @@
+MAX = 100
+
+queue = [0] * MAX
+front = -1
+rear = -1
+
+
+def enqueue(vertex):
+    global front, rear
+
+    if rear == MAX - 1:
+        print("Queue is full")
+        return
+
+    if front == -1:
+        front = 0
+
+    rear += 1
+    queue[rear] = vertex
+
+
+def dequeue():
+    global front, rear
+
+    if front == -1:
+        return -1
+
+    vertex = queue[front]
+
+    if front >= rear:
+        front = -1
+        rear = -1
+    else:
+        front += 1
+
+    return vertex
+
+
+def bfs(graph, start_vertex, vertices):
+    visited = [0] * vertices
+
+    enqueue(start_vertex)
+    visited[start_vertex] = 1
+
+    print("\nBFS Traversal:", end=" ")
+
+    while front != -1:
+        current_vertex = dequeue()
+        print(current_vertex, end=" ")
+
+        for i in range(vertices):
+            if graph[current_vertex][i] == 1 and visited[i] == 0:
+                enqueue(i)
+                visited[i] = 1
+
+    print()
+
+
+
+vertices = int(input("Enter number of vertices: "))
+
+print("Enter the adjacency matrix:")
+
+graph = []
+
+for i in range(vertices):
+    row = list(map(int, input(f"Row {i}: ").split()))
+    graph.append(row)
+
+start_vertex = int(input("Enter starting vertex: "))
+
+bfs(graph, start_vertex, vertices)
