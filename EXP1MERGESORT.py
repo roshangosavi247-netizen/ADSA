@@ -5,7 +5,7 @@ def merge(arr, lb, mid, ub):
     j = mid + 1
     k = lb
 
-    while i <= mid and j <= ub:
+    while i <= mid and
         if arr[i] <= arr[j]:
             B[k] = arr[i]
             i += 1
