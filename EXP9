@@ -1,0 +1,47 @@
+import sys
+
+INF = sys.maxsize
+
+def dijkstra(graph, source, n):
+    distance = [INF] * n
+    visited = [False] * n
+
+    distance[source] = 0
+
+    for _ in range(n):
+        # Pick unvisited vertex with minimum distance
+        min_dist = INF
+        u = -1
+        for i in range(n):
+            if not visited[i] and distance[i] < min_dist:
+                min_dist = distance[i]
+                u = i
+
+        if u == -1 or distance[u] == INF:
+            break
+
+        visited[u] = True
+
+        # Relax adjacent edges
+        for v in range(n):
+            if not visited[v] and graph[u][v] != 0:
+                if distance[u] + graph[u][v] < distance[v]:
+                    distance[v] = distance[u] + graph[u][v]
+
+    return distance
+
+
+if __name__ == "__main__":
+    graph = [
+        [0, 10, 0, 30, 100],
+        [10, 0, 50, 0, 0],
+        [0, 50, 0, 20, 10],
+        [30, 0, 20, 0, 60],
+        [100, 0, 10, 60, 0]
+    ]
+    source = 0
+    distances = dijkstra(graph, source, len(graph))
+
+    print(f"Vertex\tDistance from Source ({source})")
+    for vertex, d in enumerate(distances):
+        print(f"{vertex}\t{'INF' if d == INF else d}")
