@@ -5,74 +5,73 @@ class Node:
         self.right = None
 
 
-# Build tree from preorder list (-1 represents NULL)
-def insert_node(values):
-    if not values:
-        return None
+# Insert a value according to BST rules
+def insert_bst(root, data):
+    if root is None:
+        return Node(data)
 
-    data = values.pop(0)
+    if data < root.data:
+        root.left = insert_bst(root.left, data)
+    elif data > root.data:
+        root.right = insert_bst(root.right, data)
 
-    if data == -1:
-        return None
-
-    node = Node(data)
-    node.left = insert_node(values)
-    node.right = insert_node(values)
-
-    return node
+    return root
 
 
-# Preorder Traversal
-def preorder(node):
-    if node is None:
-        return
-    print(node.data, end=" ")
-    preorder(node.left)
-    preorder(node.right)
-
-
-# Inorder Traversal
-def inorder(node):
-    if node is None:
-        return
-    inorder(node.left)
-    print(node.data, end=" ")
-    inorder(node.right)
-
-
-# Postorder Traversal
-def postorder(node):
-    if node is None:
-        return
-    postorder(node.left)
-    postorder(node.right)
-    print(node.data, end=" ")
-
-# Search Function
-def search(node, key):
-    if node is None:
+# Search for a key in the BST: O(h) time complexity
+def search(root, key):
+    if root is None:
         return False
 
-    if node.data == key:
+    if root.data == key:
         return True
+    elif key < root.data:
+        return search(root.left, key)
+    else:
+        return search(root.right, key)
 
-    return search(node.left, key) or search(node.right, key)
+
+# Preorder Traversal (Root -> Left -> Right)
+def preorder(node):
+    if node:
+        print(node.data, end=" ")
+        preorder(node.left)
+        preorder(node.right)
+
+
+# Inorder Traversal (Left -> Root -> Right)
+def inorder(node):
+    if node:
+        inorder(node.left)
+        print(node.data, end=" ")
+        inorder(node.right)
+
+
+# Postorder Traversal (Left -> Right -> Root)
+def postorder(node):
+    if node:
+        postorder(node.left)
+        postorder(node.right)
+        print(node.data, end=" ")
+
 
 # Main Program
 n = int(input("Enter the number of elements: "))
 
-print("Enter the preorder elements (-1 for NULL):")
+print(f"Enter {n} numbers separated by spaces:")
 values = list(map(int, input().split()))
 
 if len(values) != n:
-    print("Error: Number of elements does not match.")
+    print(f"Error: Expected {n} elements, but got {len(values)}.")
 else:
-    root = insert_node(values)
+    root = None
+    for val in values:
+        root = insert_bst(root, val)
 
     print("\nPreorder Traversal:")
     preorder(root)
 
-    print("\nInorder Traversal:")
+    print("\nInorder Traversal (Sorted):")
     inorder(root)
 
     print("\nPostorder Traversal:")
